@@ -1,0 +1,22 @@
+[package]
+name = "octomommy"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "om"
+path = "src/run_octo_mommy.rs"
+
+[[bin]]
+name = "om-server"
+path = "src/start_octo_mommy_server.rs"
+
+[dependencies]
+bincode = "1.3.3"
+crossbeam = { version = "0.8.2", features = ["crossbeam-queue"] }
+lazy_static = "1.4.0"
+serde = {version="1.0.188", features=["derive"]}
+tokio = {version="1.32.0", features=["net", "io-util", "full"]}
+uuid = { version = "1.4.1", features = ["v4"] }
