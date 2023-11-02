@@ -1,8 +1,8 @@
-pub async fn launch_server_tasks() {
-    loop {
-        process_message_queue().await;
-        tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
-    }
+use super::message_processing::process_message_queue;
+
+pub async fn launch_tasks() {
+    let message_queue_task = tokio::spawn(process_message_queue());
+    let _ = tokio::join!(message_queue_task);
     // need some form of scheduler here for intermediate tasks
     /* check into
     task scope

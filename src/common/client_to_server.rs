@@ -7,8 +7,8 @@ use super::metadata::MessageOrigin;
 #[derive(Debug, Clone)]
 pub struct ClientToServerMessageBundle {
     // metadata
-    pub connection_id: Option<u32>,
-    pub socket_address: Option<std::net::SocketAddr>,
+    pub connection_id: u32,
+    pub socket_address: std::net::SocketAddr,
     pub send_time: SystemTime,
     pub received_time: SystemTime,
     pub origin: MessageOrigin,
@@ -19,8 +19,8 @@ pub struct ClientToServerMessageBundle {
 
 impl ClientToServerMessageBundle {
     pub fn new(
-        connection_id: Option<u32>,
-        socket_address: Option<std::net::SocketAddr>,
+        connection_id: u32,
+        socket_address: std::net::SocketAddr,
         received_time: SystemTime,
         message: ClientToServerMessage,
     ) -> Self {
@@ -57,7 +57,5 @@ impl ClientToServerMessage {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum ClientToServerMessageData {
-    Connect,
-    Disconnect,
     Message { message: String },
 }

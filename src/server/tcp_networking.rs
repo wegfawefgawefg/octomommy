@@ -69,8 +69,8 @@ pub async fn handle_new_connection(
     ));
 
     // cleanup connection resources when both tasks are done
-    tokio::try_join!(rx_task_handle, tx_task_handle)?;
-    // do some cleanup
+    let _ = tokio::try_join!(rx_task_handle, tx_task_handle)?;
+    do_bookkeeping_for_remove_connection(connection_id).await; //  remove client allocated bookkeeping resources
 
     Ok(())
 }
@@ -96,10 +96,11 @@ pub async fn continuously_read_inbound_messages(
         let result: Result<ClientToServerMessage, _> = bincode::deserialize(&buffer[..nbytes]);
         match result {
             Ok(message) => {
+                println!("rcvd a message");
                 let received_time = std::time::SystemTime::now();
                 let message_bundle = ClientToServerMessageBundle::new(
-                    Some(connection_id),
-                    Some(socket_address),
+                    connection_id,
+                    socket_address,
                     received_time,
                     message,
                 );
@@ -128,7 +129,6 @@ pub async fn continuously_send_outbound_messages(
         // check for disconnect
         {
             if disconnected.load(Ordering::SeqCst) {
-                do_bookkeeping_for_remove_connection(id).await; //  remove client allocated bookkeeping resources
                 return Ok(());
             }
         }
