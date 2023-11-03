@@ -1,0 +1,9 @@
+-setup gpt4 integration
+
+
+-setup cli args n shit (clap?)
+-setup surreal db
+
+-think about command interface
+-get command daemon supervised with executes commands on behalf of octomommy
+
